@@ -16,7 +16,7 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 import java.sql.SQLException;
 import java.util.List;
 
-public class StudentsList extends OrmLiteBaseActivity<StudentsHelper> implements View.OnClickListener {
+public class StudentsListActivity extends OrmLiteBaseActivity<StudentsHelper> implements View.OnClickListener {
     private RecyclerView listView;
     private ProgressBar progressBar;
     private TextView noStudentsText;
@@ -26,7 +26,7 @@ public class StudentsList extends OrmLiteBaseActivity<StudentsHelper> implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_students_list);
-
+        //setTitle(getString(R.string.app_name));
         listView = (RecyclerView) findViewById(R.id.list);
         progressBar = (ProgressBar) findViewById(R.id.progress);
         noStudentsText = (TextView) findViewById(R.id.noStudentsText);
