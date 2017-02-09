@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -17,6 +19,9 @@ import java.sql.SQLException;
 public class StudentsHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATABASE_NAME = "studentsdata.db";
     private static final int DATABASE_VERSION = 1;
+
+    private Dao<Student, Integer> simpleDao = null;
+    private RuntimeExceptionDao<Student, Integer> simpleRuntimeDao = null;
 
     public StudentsHelper(Context context) {
         super(context, DATABASE_NAME,
@@ -45,5 +50,26 @@ public class StudentsHelper extends OrmLiteSqliteOpenHelper {
             Log.e(StudentsHelper.class.getName(), "Can't drop databases", e);
             throw new RuntimeException(e);
         }
+    }
+
+    public Dao<Student, Integer> getDao() throws SQLException {
+        if (simpleDao == null) {
+            simpleDao = getDao(Student.class);
+        }
+        return simpleDao;
+    }
+
+    public RuntimeExceptionDao<Student, Integer> getSimpleDataDao() {
+        if (simpleRuntimeDao == null) {
+            simpleRuntimeDao = getRuntimeExceptionDao(Student.class);
+        }
+        return simpleRuntimeDao;
+    }
+
+    @Override
+    public void close() {
+        super.close();
+        simpleDao = null;
+        simpleRuntimeDao = null;
     }
 }

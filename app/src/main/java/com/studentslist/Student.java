@@ -7,7 +7,6 @@ import com.j256.ormlite.table.DatabaseTable;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultSortOrder;
 
 /**
  * Created by sameer.belsare on 9/2/17.
@@ -17,10 +16,7 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultSortOrder
 @DefaultContentUri(authority = "com.tojc.ormlite.android.ormlitecontentprovider", path = "students")
 @DefaultContentMimeTypeVnd(name = "com.tojc.ormlite.android.ormlitecontentprovider", type = "students")
 public class Student {
-    @DatabaseField(columnName = BaseColumns._ID, generatedId = true)
-    @DefaultSortOrder
-    private int id;
-    @DatabaseField
+    @DatabaseField(columnName = BaseColumns._ID, id = true)
     private int rollNumber;
     @DatabaseField
     private String firstName;
@@ -37,8 +33,21 @@ public class Student {
 
     }
 
-    public int getId() {
-        return id;
+    public Student(int rollNumber, String firstName, String lastName, int age, String address, String photoUrl) {
+        this.rollNumber = rollNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.address = address;
+        this.photoUrl = photoUrl;
+    }
+
+    public Student(String firstName, String lastName, int age, String address, String photoUrl) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.address = address;
+        this.photoUrl = photoUrl;
     }
 
     public int getRollNumber() {
