@@ -2,19 +2,18 @@ package com.studentslist;
 
 import android.content.ContentValues;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
-
 /**
  * Created by sameer.belsare on 11/2/17.
  * Activity class to add new student entry
  */
-public class AddStudentActivity extends OrmLiteBaseActivity<StudentsHelper> implements View.OnClickListener {
+public class AddStudentActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText firstName;
     private EditText lastName;
     private EditText age;

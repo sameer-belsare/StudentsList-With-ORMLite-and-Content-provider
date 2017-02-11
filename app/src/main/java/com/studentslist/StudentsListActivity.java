@@ -5,30 +5,30 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 /**
  * Created by sameer.belsare on 11/2/17.
  * Activity class to show list of students
  */
-public class StudentsListActivity extends OrmLiteBaseActivity<StudentsHelper> implements View.OnClickListener {
+public class StudentsListActivity extends AppCompatActivity implements View.OnClickListener {
     private RecyclerView listView;
     private ProgressBar progressBar;
     private TextView noStudentsText;
     private StudentsRecyclerViewCursorAdapter studentsAdapter;
+    private StudentsHelper studentsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_students_list);
-        //setTitle(getString(R.string.app_name));
         listView = (RecyclerView) findViewById(R.id.list);
         progressBar = (ProgressBar) findViewById(R.id.progress);
         noStudentsText = (TextView) findViewById(R.id.noStudentsText);
@@ -50,7 +50,10 @@ public class StudentsListActivity extends OrmLiteBaseActivity<StudentsHelper> im
         /**
          * Added dummy data using ORMLite APIs
          */
-        RuntimeExceptionDao<Student, Integer> simpleDataDao = getHelper().getSimpleDataDao();
+        if(studentsHelper == null) {
+            studentsHelper = new StudentsHelper(this);
+        }
+        RuntimeExceptionDao<Student, Integer> simpleDataDao = studentsHelper.getSimpleDataDao();
         for (int i=0; i<5; i++){
             Student student = new Student(i+1, (getResources().getStringArray(R.array.firstNameArray))[i], (getResources().getStringArray(R.array.lastNameArray))[i],
                     (getResources().getIntArray(R.array.ageArray))[i], "Address", "");
