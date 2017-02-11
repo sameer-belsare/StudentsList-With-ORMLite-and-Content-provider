@@ -17,6 +17,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AddStudentActivity"
+        android:configChanges="orientation|keyboardHidden|screenSize|fontScale|mcc|mnc|touchscreen|keyboard|navigation|screenLayout|uiMode|smallestScreenSize|layoutDirection|locale"
+        android:label="@string/add_student"
+        android:launchMode="singleTop"
+        android:screenOrientation="portrait">
+    </activity>
         <provider android:name=".StudentsProvider"
             android:authorities="com.tojc.ormlite.android.ormlitecontentprovider"
             android:exported="false"/>

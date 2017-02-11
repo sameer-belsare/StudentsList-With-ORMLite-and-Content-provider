@@ -1,5 +1,7 @@
 package com.studentslist;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,17 +12,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
-import java.sql.SQLException;
-import java.util.List;
-
+/**
+ * Created by sameer.belsare on 11/2/17.
+ * Activity class to show list of students
+ */
 public class StudentsListActivity extends OrmLiteBaseActivity<StudentsHelper> implements View.OnClickListener {
     private RecyclerView listView;
     private ProgressBar progressBar;
     private TextView noStudentsText;
-    private StudentsAdapter studentsAdapter;
+    private StudentsRecyclerViewCursorAdapter studentsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,34 +38,24 @@ public class StudentsListActivity extends OrmLiteBaseActivity<StudentsHelper> im
             initAdapter();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Cursor studentsCursor = getContentResolver().query(StudentContract.CONTENT_URI, null, null, null, null);
+        studentsAdapter.swapCursor(studentsCursor);
+    }
+
     private void loadData() {
-            showProgress();
-            /*ContentValues values = new ContentValues();
-            values.clear();
-            values.put(StudentContract.ROLLNUMBER, "100");
-            values.put(StudentContract.FIRSTNAME, "Yamada");
-            values.put(StudentContract.LASTNAME, "Tarou");
-            values.put(StudentContract.AGE, "12");
-            values.put(StudentContract.ADDRESS, "sadlsa saldjls");
-            values.put(StudentContract.PHOTOURL, "");
-            getContentResolver().insert(StudentContract.CONTENT_URI, values);
-
-            values.clear();
-            values.put(StudentContract.ROLLNUMBER, "101");
-            values.put(StudentContract.FIRSTNAME, "Ackjsa");
-            values.put(StudentContract.LASTNAME, "Cakldhsa");
-            values.put(StudentContract.AGE, "11");
-            values.put(StudentContract.ADDRESS, "Hlshd s; ;sjd");
-            values.put(StudentContract.PHOTOURL, "");
-            getContentResolver().insert(StudentContract.CONTENT_URI, values);*/
-        Student student = new Student("sdasd", "dsa", 12, "dsadsa dsa", "");
-        try {
-            final Dao<Student, Integer> studentDao = getHelper().getDao();
-            studentDao.createIfNotExists(student);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        showProgress();
+        /**
+         * Added dummy data using ORMLite APIs
+         */
+        RuntimeExceptionDao<Student, Integer> simpleDataDao = getHelper().getSimpleDataDao();
+        for (int i=0; i<5; i++){
+            Student student = new Student(i+1, (getResources().getStringArray(R.array.firstNameArray))[i], (getResources().getStringArray(R.array.lastNameArray))[i],
+                    (getResources().getIntArray(R.array.ageArray))[i], "Address", "");
+            simpleDataDao.createIfNotExists(student);
         }
-
     }
 
     public void showProgress() {
@@ -83,47 +75,25 @@ public class StudentsListActivity extends OrmLiteBaseActivity<StudentsHelper> im
     }
 
     public void initAdapter() {
-        RuntimeExceptionDao<Student, Integer> simpleDao = getHelper().getSimpleDataDao();
-        List<Student> list = simpleDao.queryForAll();
-
         noStudentsText.setVisibility(View.GONE);
-        studentsAdapter = new StudentsAdapter(this, this);
-        studentsAdapter.updateStudents();
+        studentsAdapter = new StudentsRecyclerViewCursorAdapter(this, this);
         listView.setAdapter(studentsAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         listView.setLayoutManager(linearLayoutManager);
         listView.setHasFixedSize(true);
         hideProgress();
-        /*studentsCursor = getContentResolver().query(StudentContract.CONTENT_URI, null, null, null, null);
-        students = new ArrayList<>();
-        if(studentsCursor != null) {
-            while (studentsCursor.moveToNext()) {
-                Student student = new Student(studentsCursor.getInt(0), studentsCursor.getString(1), studentsCursor.getString(2),
-                        studentsCursor.getInt(3), studentsCursor.getString(4), studentsCursor.getString(5));
-                students.add(student);
-                *//*for (int i = 0; i < studentsCursor.getColumnCount(); i++) {
-                    //Log.d(getClass().getSimpleName(), studentsCursor.getColumnName(i) + " : " + studentsCursor.getString(i));
-                    students.add(new Student(studentsCursor.getInt(i), studentsCursor.getString(i), studentsCursor.getString(i),
-                            studentsCursor.getInt(i), studentsCursor.getString(i), studentsCursor.getString(i)));
-                }*//*
-            }
-            studentsCursor.close();
-
-            if (students != null && students.size() > 0) {
-                noStudentsText.setVisibility(View.GONE);
-                studentsAdapter = new StudentsAdapter(students, this, this);
-                listView.setAdapter(studentsAdapter);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-                listView.setLayoutManager(linearLayoutManager);
-                listView.setHasFixedSize(true);
-            }
-        } else {
-            showErrorMessage("No data found");
-        }*/
     }
 
     @Override
     public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.ll_main:
 
+                break;
+            case R.id.fab:
+                Intent intent = new Intent(this, AddStudentActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 }

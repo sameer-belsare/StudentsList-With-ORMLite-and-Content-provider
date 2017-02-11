@@ -14,6 +14,7 @@ import java.sql.SQLException;
 
 /**
  * Created by sameer.belsare on 9/2/17.
+ * Database helper class for Student
  */
 
 public class StudentsHelper extends OrmLiteSqliteOpenHelper {

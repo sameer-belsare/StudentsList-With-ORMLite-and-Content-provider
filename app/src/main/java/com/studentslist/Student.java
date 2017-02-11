@@ -10,6 +10,7 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUr
 
 /**
  * Created by sameer.belsare on 9/2/17.
+ * Student data
  */
 @Contract
 @DatabaseTable(tableName = "students")
